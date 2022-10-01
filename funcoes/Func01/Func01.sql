@@ -1,3 +1,5 @@
+-- I. Sessões e Ingressos
+
 CREATE FUNCTION return_ingressos_disponiveis(in_sessao INTEGER) RETURNS numeric AS $$
 DECLARE
 var_ingressos_disponiveis NUMERIC;
