@@ -1,0 +1,28 @@
+CREATE OR REPLACE FUNCTION consulta_historico_reserva()
+RETURNS trigger as $$
+BEGIN
+    CREATE TABLE IF NOT EXISTS trabalho_g1.historico_reserva (
+        cod_reserva_historico INT NOT NULL PRIMARY KEY,
+        cod_pedido INT NOT NULL,
+        cod_espetaculo INT NOT NULL,
+        cod_sessao INT NOT NULL,
+        cod_reserva INT NOT NULL,
+        cadeira VARCHAR(10) NOT NULL
+    );
+
+   insert into trabalho_g1.historico_reserva
+   select coalesce((select max(pa.cod_reserva_historico)+1 from trabalho_g1.historico_reserva pa), 1), pa.*
+    from trabalho_g1.reserva pa
+    where pa.cod_reserva = OLD.cod_reserva;
+
+   RETURN OLD;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER consulta_historico_reserva_trigger
+BEFORE DELETE ON trabalho_g1.reserva
+FOR EACH ROW
+EXECUTE PROCEDURE consulta_historico_reserva();
+
+DELETE FROM reserva WHERE cod_espetaculo=2;

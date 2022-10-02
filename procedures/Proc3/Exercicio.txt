@@ -1,0 +1,32 @@
+CREATE OR REPLACE PROCEDURE criar_pedido(in_data_pedido IN TIMESTAMP WITHOUT TIME ZONE, in_cod_cliente 
+IN INT, out_codpedido INOUT INT)  
+AS 
+	$BODY$
+		DECLARE 
+			cliente_status CHAR;
+			cliente_id INTEGER;
+		BEGIN
+    	IF status <> 'a' then
+      	RAISE EXCEPTION 'INATIVO';
+      END IF;
+    
+			IF cliente_status IS NULL THEN
+				RAISE EXCEPTION 'Cliente não ativo no banco de dados';
+			END IF;
+			
+			IF cliente_id IS NULL THEN
+				RAISE EXCEPTION 'Cliente não existente no banco de dados';
+			END IF;
+			
+  			SELECT cod_cliente 
+			INTO in_cod_cliente
+			FROM trabalho_g1.cliente
+			WHERE cod_cliente = in_cod_cliente;
+			
+			INSERT INTO trabalho_g1.pedido(cod_cliente, data_pedido) 
+						VALUES (in_cod_cliente, in_data_pedido) RETURNING cod_pedido INTO out_codpedido;
+		END;
+	$BODY$
+LANGUAGE 'plpgsql';
+
+call criar_pedido('2021-10-07', 2, v_output);

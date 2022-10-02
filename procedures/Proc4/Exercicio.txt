@@ -1,0 +1,20 @@
+CREATE OR REPLACE PROCEDURE criar_reserva(IN in_cod_espetaculo INTEGER,IN in_cod_sessao INTEGER,IN in_cadeira VARCHAR(10))
+LANGUAGE plpgsql    
+AS $$
+DECLARE 
+	cod_espetaculo NUMERIC;
+	cod_sessao NUMERIC;
+	cod_pedido NUMERIC;
+BEGIN
+	SELECT e.cod_espetaculo INTO cod_espetaculo FROM trabalho_g1.espetaculo e WHERE e.cod_espetaculo = in_cod_espetaculo;
+	IF cod_espetaculo IS null THEN
+		RAISE EXCEPTION 'Espetaculo inexistente: %', in_cod_espetaculo;
+	END IF;	
+	SELECT s.cod_sessao INTO cod_sessao FROM trabalho_g1.sessao s WHERE s.cod_sessao = in_cod_sessao;	
+	IF cod_sessao IS null THEN
+		RAISE EXCEPTION 'Sessao inexistente: %', in_cod_sessao;
+	END IF;
+	INSERT INTO reserva (cod_espetaculo, cod_sessao, cadeira) 
+		VALUES (in_cod_espetaculo, in_cod_sessao, in_cadeira);
+END;
+$$;
