@@ -1,5 +1,4 @@
 -- III. Cliente e Pedidos
-
 CREATE FUNCTION return_cliente_pedidos(in_pedido INTEGER) RETURNS numeric AS $$
 DECLARE
 var_cliente_pedidos NUMERIC;

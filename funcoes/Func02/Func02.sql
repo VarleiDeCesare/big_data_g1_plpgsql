@@ -1,3 +1,4 @@
+-- II. Reserva de Assentos
 CREATE FUNCTION return_reserva_assento(in_reserva INTEGER) RETURNS numeric AS $$
 DECLARE
 var_reserva_assento NUMERIC;
@@ -6,8 +7,6 @@ SELECT count(reserva.cadeira) INTO var_reserva_assento FROM reserva
 INNER JOIN sessao
 ON reserva.cod_sessao = sessao.cod_sessao
 INNER JOIN pedido
--- II. Reserva de Assentos
-
 ON reserva.cod_pedido = pedido.cod_pedido
 WHERE reserva.cod_reserva = in_reserva;
 if(var_reserva_assento > 0) then
