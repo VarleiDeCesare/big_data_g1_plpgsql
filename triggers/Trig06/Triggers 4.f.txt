@@ -1,0 +1,25 @@
+CREATE OR REPLACE FUNCTION VERIFICA_CLI()
+RETURNS TRIGGER AS
+$BODY$
+BEGIN
+  IF (SELECT COUNT(COD_PEDIDO)
+        FROM PEDIDO
+       WHERE COD_CLIENTE = OLD.COD_CLIENTE 
+         AND STATUS = 'A') > 0 THEN 
+    RAISE NOTICE 'O cliente possui pedidos em aberto, assim não pode ser inativado.';
+    RETURN NEW;
+  ELSE
+    RAISE NOTICE 'Um cliente não pode ser deletado, apenas alterar o status para "Inativo".';
+	RETURN NEW;
+  END IF; 
+END;
+$BODY$ LANGUAGE PLPGSQL;
+
+CREATE TRIGGER DELETE_CLI
+BEFORE DELETE
+    ON CLIENTE
+   FOR EACH ROW
+EXECUTE PROCEDURE VERIFICA_CLI();
+
+DELETE FROM CLIENTE WHERE COD_CLIENTE = 3 -- Cliente possui pedidos
+DELETE FROM CLIENTE WHERE COD_CLIENTE = 6 -- Cliente não possui pedidos

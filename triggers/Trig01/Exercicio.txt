@@ -1,0 +1,16 @@
+CREATE OR REPLACE FUNCTION verifica_disponibilidade()
+RETURNS trigger as $$
+BEGIN
+   if (select pa.ingressos_disponiveis from trabalho_g1.sessao pa where pa.cod_sessao = NEW.cod_sessao) > 0 then
+    RETURN NEW;
+   else
+    RAISE EXCEPTION 'Não há mais vagas disponíveis';
+   end if;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER verifica_disponibilidade_sessao_trigger
+BEFORE INSERT ON trabalho_g1.reserva
+FOR EACH ROW
+EXECUTE PROCEDURE verifica_disponibilidade();
