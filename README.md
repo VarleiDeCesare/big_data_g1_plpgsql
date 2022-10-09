@@ -40,15 +40,15 @@ Demétrio:
 
 3. Criar procedimentos para executar as seguintes ações/regras:
 
-c.
+c.criar_pedido(in_data_pedido IN TIMESTAMP WITHOUT TIME ZONE, in_cod_cliente IN INT, out_codpedido INOUT INT)
 
-d.
+d.criar_reserva(cod_espetaculo IN INT, cod_sessao IN INT, cod_pedido IN INT, cadeira IN VARCHAR(10))
 
 4) Criar triggers:
 
-a.
+a.Ao tentar inserir um registro na tabela RESERVA (BEFORE INSERT), testar se ainda existem ingressos disponíveis para determinada sessão, senão disparar exceção, abortando a operação.
 
-b.
+b.Ao tentar excluir uma reserva (BEFORE DELETE)
 
 Guilherme:
 
